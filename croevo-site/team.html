@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Our Team | Croevo AI</title>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><strong>CROEVO AI</strong></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="newsletter.html">News</a>
+            <a href="team.html">Our Team</a>
+            <a href="verifier.html">Memo Verifier</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="section-title gradient-text" style="text-align: center; margin-top: 2rem;">Know Our Team</h2>
+        <div id="teamGrid" class="team-grid">
+            <p style="text-align: center; color: var(--primary);">Loading the innovators...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        // FIX: Ensure path matches your project structure
+        import { supabase } from './js/supabase-config.js';
+
+        async function displayTeam() {
+            const teamGrid = document.getElementById('teamGrid');
+            
+            try {
+                // 1. Fetch data from Supabase
+                const { data: members, error } = await supabase
+                    .from('team')
+                    .select('*');
+
+                if (error) throw error;
+
+                if (members && members.length > 0) {
+                    // 2. Map data to HTML cards using your HyperMart green theme
+                    teamGrid.innerHTML = members.map(member => `
+                        <div class="glass team-card">
+                            <div class="member-img" style="background-image: url('${member.image_url || 'https://via.placeholder.com/150'}')"></div>
+                            <h3>${member.name}</h3>
+                            <p class="role" style="color: var(--primary); font-weight: bold;">${member.role}</p>
+                            <p class="bio" style="color: #94a3b8; font-size: 0.9rem;">${member.bio}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    teamGrid.innerHTML = `<p style="text-align: center;">No team members found.</p>`;
+                }
+            } catch (err) {
+                console.error("Error fetching team:", err.message);
+                teamGrid.innerHTML = `<p style="color: red; text-align: center;">Failed to load team data.</p>`;
+            }
+        }
+
+        // Run immediately since it's a module
+        displayTeam();
+    </script>
+</body>
+</html>

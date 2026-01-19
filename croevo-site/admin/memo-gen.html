@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <title>Memo Generator | Croevo AI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="sidebar">
+    <h3 class="gradient-text">CROEVO ADMIN</h3>
+    <ul class="nav-menu">
+        <li><a href="dashboard.html">Overview</a></li>
+        <li><a href="memo-gen.html" class="active">Memo Generator</a></li>
+        <li><a href="news-post.html">Announcements</a></li>
+        <li><a href="team-manage.html">Team Control</a></li><li><a href="subscribers.html">Subscribers</a></li>
+        <li><a href="settings.html">Settings</a></li>
+    </ul>
+</nav>
+
+<div class="main-content">
+    <h2 class="gradient-text">📜 Professional Memo Generator</h2>
+    <div class="admin-card">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <label>Recipient Name</label>
+                <input type="text" id="memoTo" class="admin-input" placeholder="e.g. Abhinav">
+                <label>Subject / Purpose</label>
+                <input type="text" id="memoPurpose" class="admin-input" placeholder="e.g. Internship Offer">
+            </div>
+            <div>
+                <label>Official Content</label>
+                <textarea id="memoBody" class="admin-input" style="height: 150px;" placeholder="Enter the main message..."></textarea>
+            </div>
+        </div>
+        <button id="genBtn" class="btn-primary" style="width: 100%;">Issue & Download Official Memo</button>
+    </div>
+</div>
+
+<script type="module">
+    import { supabase } from '../js/supabase-config.js';
+
+    document.getElementById('genBtn').onclick = async () => {
+        const { jsPDF } = window.jspdf;
+        
+        // 1. Generate Unique ID and Date
+        const memoId = "CRV-" + Math.random().toString(36).substr(2, 8).toUpperCase();
+        const date = new Date().toLocaleDateString();
+
+        const recipient = document.getElementById('memoTo').value;
+        const purpose = document.getElementById('memoPurpose').value;
+        const body = document.getElementById('memoBody').value;
+
+        if(!recipient || !body) return alert("Fill all fields");
+
+        // 2. Log to Supabase for the Public Verifier
+        const { error } = await supabase.from('memos').insert([{
+            memo_id: memoId,
+            recipient: recipient,
+            purpose: purpose,
+            issued_date: date
+        }]);
+
+        if (error) return alert("Error logging to database: " + error.message);
+
+        // 3. Create PDF Template
+        const doc = new jsPDF();
+        doc.setFont("helvetica", "bold");
+        doc.text("CROEVO AI - INNOVATION HUB", 105, 20, { align: "center" });
+        doc.setFontSize(10);
+        doc.text("BVRIT Campus, Narsapur", 105, 26, { align: "center" });
+        doc.line(20, 30, 190, 30); 
+
+        doc.text(`MEMO ID: ${memoId}`, 20, 45);
+        doc.text(`DATE: ${date}`, 150, 45);
+        doc.text(`TO: ${recipient}`, 20, 60);
+        doc.text(`SUBJECT: ${purpose}`, 20, 70);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(body, 20, 90, { maxWidth: 170 });
+
+        doc.text("Authorized by: Croevo AI Board", 20, 260);
+        doc.save(`Memo_${memoId}.pdf`);
+        alert("Success! Document generated and logged.");
+    };
+</script>
+</body>
+</html>

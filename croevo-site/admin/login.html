@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Admin login | Croevo AI</title>
+</head>
+<body>
+
+<div class="login-container">
+    <h2 class="gradient-text">Admin Access</h2>
+    <div class="login-box glass">
+        <input type="email" id="adminEmail" placeholder="admin@croevo.com">
+        <input type="password" id="adminPass" placeholder="Admin Password">
+        
+        <button id="loginBtn" class="btn-primary">Sign In</button>
+    </div>
+</div>
+
+<script type="module">
+    import { supabase } from '../js/supabase-config.js';
+
+    async function loginAdmin() {
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPass').value;
+
+        if (!email || !password) {
+            alert("Please enter both email and password.");
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            alert("Login Failed: " + error.message);
+        } else {
+            alert("Success! Welcome, Abhinav.");
+            window.location.href = "dashboard.html";
+        }
+    }
+
+    // Attach the function to the button
+    document.getElementById('loginBtn').addEventListener('click', loginAdmin);
+</script>
+
+</body>
+</html>

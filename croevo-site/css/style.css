@@ -1,0 +1,124 @@
+:root {
+    /* Updated to HyperMart Palette */
+    --primary: #22c55e;        /* Vibrant Green */
+    --secondary: #06b6d4;      /* Cyan for gradients */
+    --bg: #020617;             /* Deeper Dark Navy/Black */
+    --card-bg: rgba(30, 41, 59, 0.4); 
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: #020617;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    /* Subtle radial glow in the corner like the screenshot */
+    background-image: radial-gradient(circle at top right, rgba(34, 197, 94, 0.05), transparent 40%);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.2rem 8%;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-links a {
+    color: #94a3b8; /* Muted slate text */
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.nav-links a:hover { 
+    color: var(--primary); 
+}
+
+/* Gradient text effect for headings */
+.gradient-text {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Gradient background similar to your screenshot bottom section */
+    background: radial-gradient(circle at center, rgba(34, 197, 94, 0.1) 0%, var(--bg) 70%);
+}
+
+.btn-primary {
+    background: var(--primary);
+    padding: 0.9rem 2.2rem;
+    border-radius: 12px;
+    color: #020617; /* Dark text on green button */
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+    filter: brightness(1.1);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 3rem 8%;
+}
+
+.glass {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass:hover {
+    transform: translateY(-8px);
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(30, 41, 59, 0.6);
+}
+
+.member-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 20px; /* Squircle look instead of circle */
+    background-size: cover;
+    margin: 0 auto 1.5rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.news-card {
+    margin-bottom: 2rem;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 4px solid var(--primary);
+}
+
+.news-date {
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
