@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Croevo AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #050505;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden pb-20">
+    <script>
+        // Check Auth
+        if (!sessionStorage.getItem('adminToken')) {
+            window.location.href = '/login.html';
+        }
+    </script>
+
+    <header class="bg-black/60 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+            <h1 class="text-xl font-bold text-[#00C6FF]">Admin Dashboard</h1>
+            <div class="flex gap-4">
+                <a href="/" target="_blank"
+                    class="text-sm font-medium text-gray-400 hover:text-white transition-colors">View Site</a>
+                <button onclick="logout()"
+                    class="text-sm font-medium text-red-400 hover:text-red-300 transition-colors">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-5xl mx-auto px-6 mt-10">
+        <!-- TEAM EDITOR -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-white/10 pb-2">Manage Team</h2>
+            <div id="team-list" class="space-y-4"></div>
+            <button onclick="addTeamMember()"
+                class="mt-4 px-4 py-2 rounded bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors">+ Add
+                Member</button>
+        </section>
+
+        <!-- CAREERS EDITOR -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b border-white/10 pb-2">Manage Careers</h2>
+            <div id="careers-list" class="space-y-4"></div>
+            <button onclick="addJob()"
+                class="mt-4 px-4 py-2 rounded bg-white/10 hover:bg-white/20 text-sm font-medium transition-colors">+ Add
+                Job</button>
+        </section>
+
+        <div class="fixed bottom-6 right-6 flex gap-4">
+            <div id="saveMsg"
+                class="hidden px-4 py-2 bg-green-500/20 text-green-400 rounded-lg border border-green-500/30">Changes
+                Saved!</div>
+            <button onclick="saveAll()"
+                class="px-8 py-3 rounded-full bg-[#00C6FF] text-black font-bold shadow-lg hover:bg-[#5EE7FF] transition-transform hover:scale-105">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentData = { team: [], careers: [] };
+
+        async function loadContent() {
+            try {
+                const response = await fetch('/api/content');
+                currentData = await response.json();
+                renderTeam();
+                renderCareers();
+            } catch (err) {
+                alert("Failed to load content.");
+            }
+        }
+
+        // --- TEAM RENDERING ---
+        function renderTeam() {
+            const container = document.getElementById('team-list');
+            container.innerHTML = currentData.team.map((member, index) => `
+                <div class="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col md:flex-row gap-4 items-start">
+                    <div class="flex-1 space-y-3 w-full">
+                        <input type="text" placeholder="Name" value="${member.name}" onchange="updateTeam(${index}, 'name', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-white">
+                        <input type="text" placeholder="Role" value="${member.role}" onchange="updateTeam(${index}, 'role', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-[#00C6FF]">
+                        <input type="text" placeholder="Image URL (e.g. Dicebear)" value="${member.image}" onchange="updateTeam(${index}, 'image', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-gray-400">
+                        <textarea placeholder="Bio" onchange="updateTeam(${index}, 'bio', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-gray-300 h-20">${member.bio}</textarea>
+                    </div>
+                    <button onclick="removeTeam(${index})" class="text-red-400 hover:text-red-300 text-sm px-2">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function addTeamMember() {
+            currentData.team.push({ name: "", role: "", bio: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=" + Date.now() });
+            renderTeam();
+        }
+
+        function removeTeam(index) {
+            currentData.team.splice(index, 1);
+            renderTeam();
+        }
+
+        function updateTeam(index, field, value) {
+            currentData.team[index][field] = value;
+        }
+
+        // --- CAREERS RENDERING ---
+        function renderCareers() {
+            const container = document.getElementById('careers-list');
+            container.innerHTML = currentData.careers.map((job, index) => `
+                <div class="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col md:flex-row gap-4 items-start">
+                    <div class="flex-1 space-y-3 w-full">
+                        <div class="flex gap-4">
+                            <input type="text" placeholder="Job Title" value="${job.title}" onchange="updateCareer(${index}, 'title', this.value)" class="flex-1 bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-white">
+                            <input type="text" placeholder="Type (e.g. Full-time)" value="${job.type}" onchange="updateCareer(${index}, 'type', this.value)" class="w-1/3 bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-gray-400">
+                        </div>
+                        <input type="text" placeholder="Location" value="${job.location}" onchange="updateCareer(${index}, 'location', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-gray-400">
+                        <input type="text" placeholder="Apply URL (Google Form)" value="${job.applyUrl || ''}" onchange="updateCareer(${index}, 'applyUrl', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-[#00C6FF]">
+                        <textarea placeholder="Description" onchange="updateCareer(${index}, 'description', this.value)" class="w-full bg-black/30 border border-white/10 rounded px-3 py-2 text-sm text-gray-300 h-20">${job.description}</textarea>
+                    </div>
+                    <button onclick="removeCareer(${index})" class="text-red-400 hover:text-red-300 text-sm px-2">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function addJob() {
+            currentData.careers.push({ title: "", location: "Remote", type: "Full-time", description: "", applyUrl: "" });
+            renderCareers();
+        }
+
+        function removeCareer(index) {
+            currentData.careers.splice(index, 1);
+            renderCareers();
+        }
+
+        function updateCareer(index, field, value) {
+            currentData.careers[index][field] = value;
+        }
+
+        // --- SAVING ---
+        async function saveAll() {
+            try {
+                const response = await fetch('/api/content', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentData)
+                });
+                const res = await response.json();
+                if (res.success) {
+                    const msg = document.getElementById('saveMsg');
+                    msg.classList.remove('hidden');
+                    setTimeout(() => msg.classList.add('hidden'), 3000);
+                } else {
+                    alert("Failed to save.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error saving data.");
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminToken');
+            window.location.href = '/login.html';
+        }
+
+        // Init
+        loadContent();
+    </script>
+</body>
+
+</html>

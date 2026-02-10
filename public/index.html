@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Croevo AI</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+  <style>
+    body {
+      background: #050505;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ===== Mobile polish (safe) ===== */
+    @media (max-width: 768px) {
+
+      section {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+      }
+
+      h1 {
+        font-size: 2.3rem;
+        line-height: 1.15;
+      }
+
+      h2 {
+        font-size: 1.9rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+
+      .hero button,
+      button {
+        width: 100%;
+        text-align: center;
+      }
+
+      footer form {
+        gap: 1rem;
+      }
+
+      footer input,
+      footer button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-white overflow-x-hidden">
+
+  <!-- ================= HEADER ================= -->
+  <header
+    class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+      <h1 class="text-xl font-bold tracking-tight text-[#00C6FF] flex items-center gap-3">
+        <img src="logo.svg" alt="Croevo AI" class="w-8 h-8 hover:scale-110 transition-transform duration-300">
+        Croevo AI
+      </h1>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+        <a href="#home" class="nav-link hover:text-[#00C6FF] transition-colors">Home</a>
+        <a href="#features" class="nav-link hover:text-[#00C6FF] transition-colors">Features</a>
+        <a href="#how-it-works" class="nav-link hover:text-[#00C6FF] transition-colors">How it Works</a>
+        <a href="#faq" class="nav-link hover:text-[#00C6FF] transition-colors">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <a href="#waitlist"
+          class="px-5 py-2 rounded-full bg-[#00C6FF] text-black font-semibold hover:bg-[#5EE7FF] transition-colors text-sm shadow-[0_0_15px_rgba(0,198,255,0.4)]">
+          Launch Soon
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="h-24"></div>
+
+  <!-- ... (rest of file) ... -->
+
+
+
+  <div class="h-24"></div>
+
+  <!-- ================= HERO ================= -->
+  <section id="home" class="min-h-[calc(100vh-6rem)] flex items-center px-6 relative overflow-hidden">
+    <!-- Hero Background Elements -->
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00C6FF]/10 blur-[120px] rounded-full -z-10">
+    </div>
+
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+      <div class="hero">
+        <div
+          class="inline-block px-4 py-1.5 rounded-full border border-[#00C6FF]/30 bg-[#00C6FF]/10 backdrop-blur-sm text-xs font-medium text-[#5EE7FF] mb-6">
+          ✨ The Future of Game Development
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tight">
+          Turn Ideas into <br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00C6FF] to-[#0096C7]">Playable Games</span>
+        </h1>
+        <p class="mt-6 text-lg text-gray-400 max-w-xl leading-relaxed">
+          Embark on a revolutionary journey with Croevo AI. Describe your dream game, and watch as our AI brings it to
+          life instantly.
+        </p>
+        <div class="mt-10 flex gap-4">
+          <a href="#waitlist"
+            class="px-8 py-3.5 rounded-full bg-[#00C6FF] text-black font-semibold hover:bg-[#5EE7FF] transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,198,255,0.5)]">
+            Join Waitlist
+          </a>
+          <a href="#features"
+            class="px-8 py-3.5 rounded-full border border-white/20 hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
+            Explore Features
+          </a>
+        </div>
+      </div>
+      <div class="relative flex justify-center lg:justify-end">
+        <div
+          class="relative w-full max-w-md aspect-square rounded-2xl bg-gradient-to-br from-[#0096C7]/50 to-black border border-white/10 p-1 backdrop-blur-sm -rotate-3 hover:rotate-0 transition-transform duration-700">
+          <div class="w-full h-full rounded-xl bg-black/80 flex items-center justify-center overflow-hidden group">
+            <!-- Abstract Game UI Representation -->
+            <div
+              class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-40 group-hover:scale-110 transition-transform duration-700 mix-blend-overlay">
+            </div>
+            <div
+              class="absolute bottom-6 left-6 right-6 p-4 bg-black/60 backdrop-blur rounded-xl border border-white/10">
+              <div class="flex gap-3 items-center">
+                <div class="w-2 h-2 rounded-full bg-[#00C6FF] animate-pulse"></div>
+                <div class="text-xs text-gray-300 font-mono">Generating game assets...</div>
+              </div>
+              <div class="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-full bg-[#00C6FF] w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURE GRID (8) ================= -->
+  <section id="features" class="py-28 px-6 relative">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00C6FF]/10 blur-[100px] rounded-full -z-10"></div>
+
+    <div class="max-w-7xl mx-auto mb-16 text-center">
+      <span class="text-[#00C6FF] font-semibold tracking-wider uppercase text-sm">Features</span>
+      <h2 class="text-3xl md:text-5xl font-bold mt-4">Everything you need to <br />build your dream game</h2>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#00C6FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#00C6FF]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Prompt to Game</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Convert simple text prompts into fully playable game
+          experiences instantly.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#0096C7]/20 flex items-center justify-center mb-4 group-hover:bg-[#0096C7]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Instant Playability</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">No compilation times. Your game is ready to play in
+          moments, not months.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#00C6FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#00C6FF]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">AI-Powered Creation</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Leverage cutting-edge generative models to bring your
+          wildest ideas to life.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#0096C7]/20 flex items-center justify-center mb-4 group-hover:bg-[#0096C7]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Future of Gaming</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Experience the next frontier of game development where
+          boundaries don't exist.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#00C6FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#00C6FF]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">User-Friendly</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">No coding required. Use natural language to design
+          mechanics and levels.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#00C6FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#00C6FF]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Community Sharing</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Share your creations and discover games built by the
+          community.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#0096C7]/20 flex items-center justify-center mb-4 group-hover:bg-[#0096C7]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Customization</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Deeply tailor your generated games to match your exact
+          vision.</p>
+      </div>
+
+      <div
+        class="feature p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all hover:-translate-y-1 group">
+        <div
+          class="w-10 h-10 rounded-lg bg-[#00C6FF]/20 flex items-center justify-center mb-4 group-hover:bg-[#00C6FF]/30 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#5EE7FF]" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold">Rapid Prototyping</h3>
+        <p class="text-gray-400 mt-2 text-sm leading-relaxed">Iterate on mechanics and visuals before committing to full
+          development.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TRANSFORM IDEAS (2 CARDS) ================= -->
+  <section id="how-it-works" class="py-32 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[#0096C7]/20 blur-[100px] pointer-events-none"></div>
+    <div class="relative max-w-4xl mx-auto z-10">
+      <span
+        class="px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-xs font-semibold uppercase tracking-wider text-[#5EE7FF]">Your
+        Creative Engine</span>
+      <h2 class="text-4xl md:text-6xl font-bold mt-6 tracking-tight">Transform Ideas into Games</h2>
+      <p class="mt-6 text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        From AI-driven generation to intuitive creation tools, we provide the platform to make it happen.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= MAGIC OF PROMPT ================= -->
+  <section class="py-24 px-6 text-center relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#00C6FF]/10 to-transparent pointer-events-none"></div>
+    <div class="relative max-w-5xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="text-left order-2 md:order-1">
+          <span
+            class="px-3 py-1 rounded-full bg-[#00C6FF]/10 border border-[#00C6FF]/20 text-[#5EE7FF] text-xs font-semibold uppercase tracking-wider">AI-Powered</span>
+          <h2 class="text-3xl md:text-5xl font-bold mt-6 mb-6">The Magic of <br /><span
+              class="text-[#00C6FF]">Prompt-to-Game</span></h2>
+          <p class="text-gray-400 text-lg leading-relaxed mb-8">
+            Create interactive experiences with unprecedented ease. Just type what you want to play, and our advanced AI
+            handles the coding, assets, and logic.
+          </p>
+          <ul class="space-y-4 text-left">
+            <li class="flex items-center gap-3 text-gray-300"><span
+                class="w-6 h-6 rounded-full bg-[#00C6FF]/20 flex items-center justify-center text-[#5EE7FF] text-xs">✓</span>
+              Natural Language Processing</li>
+            <li class="flex items-center gap-3 text-gray-300"><span
+                class="w-6 h-6 rounded-full bg-[#00C6FF]/20 flex items-center justify-center text-[#5EE7FF] text-xs">✓</span>
+              Auto-Asset Generation</li>
+            <li class="flex items-center gap-3 text-gray-300"><span
+                class="w-6 h-6 rounded-full bg-[#00C6FF]/20 flex items-center justify-center text-[#5EE7FF] text-xs">✓</span>
+              Instant Deployment</li>
+          </ul>
+        </div>
+        <div class="order-1 md:order-2 relative">
+          <div class="aspect-square rounded-2xl bg-gradient-to-tr from-[#00C6FF] to-[#0096C7] p-1">
+            <div
+              class="w-full h-full bg-neutral-900 rounded-xl overflow-hidden relative flex items-center justify-center">
+              <div
+                class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1614726365723-49cfae9e096b?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-30 mix-blend-overlay">
+              </div>
+              <div
+                class="relative z-10 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg p-6 max-w-xs w-full mx-4">
+                <div class="text-xs text-gray-400 mb-2">User Prompt</div>
+                <div class="text-white font-mono text-sm">"Create a platformer where I play as a cyber-ninja in a neon
+                  city..."</div>
+                <div class="mt-4 h-1 w-full bg-gray-700 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#00C6FF] w-3/4 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUB FEATURES ================= -->
+  <section class="py-24 px-6 bg-white/5 border-y border-white/5">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-2xl font-semibold mb-12 text-center text-gray-200">Why creators love Croevo AI</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+        <div class="p-4 rounded-xl hover:bg-white/5 transition-colors">
+          <div class="text-3xl mb-3">🚀</div>
+          <h4 class="text-white font-medium mb-1">Fast</h4>
+          <p class="text-xs text-gray-500">Instant results</p>
+        </div>
+        <div class="p-4 rounded-xl hover:bg-white/5 transition-colors">
+          <div class="text-3xl mb-3">🎨</div>
+          <h4 class="text-white font-medium mb-1">Creative</h4>
+          <p class="text-xs text-gray-500">Endless possibilities</p>
+        </div>
+        <div class="p-4 rounded-xl hover:bg-white/5 transition-colors">
+          <div class="text-3xl mb-3">💎</div>
+          <h4 class="text-white font-medium mb-1">Intuitive</h4>
+          <p class="text-xs text-gray-500">Easy interface</p>
+        </div>
+        <div class="p-4 rounded-xl hover:bg-white/5 transition-colors">
+          <div class="text-3xl mb-3">🌐</div>
+          <h4 class="text-white font-medium mb-1">Accessible</h4>
+          <p class="text-xs text-gray-500">No coding needed</p>
+        </div>
+        <div class="p-4 rounded-xl hover:bg-white/5 transition-colors">
+          <div class="text-3xl mb-3">🔗</div>
+          <h4 class="text-white font-medium mb-1">Shareable</h4>
+          <p class="text-xs text-gray-500">Showcase creations</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CREATE WITHOUT CODE ================= -->
+  <section class="py-32 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#00C6FF]/20 to-transparent blur-3xl pointer-events-none"></div>
+    <div class="relative max-w-4xl mx-auto z-10">
+      <span
+        class="px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-xs font-semibold uppercase tracking-wider text-[#5EE7FF]">Effortless
+        Creation</span>
+      <h2 class="text-4xl md:text-5xl font-bold mt-6">Create Games Without Code</h2>
+      <p class="mt-6 text-xl text-gray-400 max-w-2xl mx-auto">
+        Bring ideas to life effortlessly and explore the future of game development. Focus on fun, not syntax.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= GLASS CARD ================= -->
+  <section class="py-20 px-6">
+    <div class="max-w-5xl mx-auto relative group">
+      <div
+        class="absolute -inset-1 bg-gradient-to-r from-[#00C6FF] to-[#0096C7] rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000">
+      </div>
+      <div class="relative bg-neutral-900 ring-1 ring-white/10 rounded-3xl p-16 text-center overflow-hidden">
+        <div
+          class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mixed-blend-overlay">
+        </div>
+
+        <span class="relative inline-block px-4 py-1 rounded-full bg-white/10 text-xs font-medium text-white mb-6">Your
+          Vision</span>
+        <h2
+          class="relative text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">
+          From Prompt to Playable Game
+        </h2>
+        <p class="relative mt-6 text-gray-400 max-w-2xl mx-auto text-lg">
+          Turn ideas into interactive experiences effortlessly. Whether it's a simple arcade or a complex RPG, it starts
+          with a prompt.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAME STUDIO ================= -->
+  <section class="py-32 px-6 text-center relative">
+    <div class="absolute inset-0 bg-[#00C6FF]/10 blur-3xl pointer-events-none"></div>
+    <div class="relative max-w-4xl mx-auto">
+      <span class="text-[#00C6FF] font-semibold tracking-wider uppercase text-sm">Learn More</span>
+      <h2 class="text-5xl md:text-7xl font-bold mt-6 tracking-tighter">Croevo AI: <br />Your Game Studio</h2>
+      <p class="mt-6 text-xl text-gray-400">
+        Imagine a world where your wildest ideas become reality.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= FAQ ================= -->
+  <section id="faq" class="py-28 px-6 max-w-3xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="text-[#00C6FF] font-semibold tracking-wider uppercase text-sm">Support</span>
+      <h2 class="text-4xl font-bold mt-4">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-4">
+      <details
+        class="group border border-white/10 rounded-xl bg-white/5 overflow-hidden transition-all duration-300 open:bg-white/10">
+        <summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+          <span class="text-lg font-medium text-white">What exactly is Croevo AI?</span>
+          <span class="text-[#00C6FF] transition-transform group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <div class="px-6 pb-6 text-gray-400 leading-relaxed">
+          Croevo AI is a revolutionary platform that uses generative AI to turn text prompts into fully playable games.
+          We handle the code, assets, and logic so you can focus on creativity.
+        </div>
+      </details>
+
+      <details
+        class="group border border-white/10 rounded-xl bg-white/5 overflow-hidden transition-all duration-300 open:bg-white/10">
+        <summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+          <span class="text-lg font-medium text-white">How does prompt-to-game work?</span>
+          <span class="text-[#00C6FF] transition-transform group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <div class="px-6 pb-6 text-gray-400 leading-relaxed">
+          Our advanced AI models analyze your description to generate game mechanics, levels, characters, and assets.
+          You can then refine everything using our intuitive visual editor.
+        </div>
+      </details>
+
+      <details
+        class="group border border-white/10 rounded-xl bg-white/5 overflow-hidden transition-all duration-300 open:bg-white/10">
+        <summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+          <span class="text-lg font-medium text-white">When will Croevo AI be available?</span>
+          <span class="text-[#00C6FF] transition-transform group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <div class="px-6 pb-6 text-gray-400 leading-relaxed">
+          We are currently in a closed beta phase. Join our waitlist to get early access and be among the first to
+          experience the future of game development.
+        </div>
+      </details>
+
+      <details
+        class="group border border-white/10 rounded-xl bg-white/5 overflow-hidden transition-all duration-300 open:bg-white/10">
+        <summary class="flex justify-between items-center p-6 cursor-pointer list-none">
+          <span class="text-lg font-medium text-white">Is coding knowledge required?</span>
+          <span class="text-[#00C6FF] transition-transform group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </summary>
+        <div class="px-6 pb-6 text-gray-400 leading-relaxed">
+          Absolutely not! Croevo AI is designed for everyone. Whether you're a seasoned developer or a complete
+          beginner, you can create amazing games without writing a single line of code.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section class="py-40 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#00C6FF]/20 to-transparent blur-3xl pointer-events-none"></div>
+    <div class="relative cta z-10">
+      <span
+        class="px-4 py-1.5 rounded-full bg-white text-black text-xs font-bold uppercase tracking-wider mb-6 inline-block">Ready
+        to build?</span>
+      <h2 class="text-5xl md:text-7xl font-bold mt-2 mb-8">Start Creating Today</h2>
+      <p class="text-xl text-gray-300 mb-8">Join the waitlist and be the first to experience the future.</p>
+      <a href="#waitlist"
+        class="inline-block px-10 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-gray-200 transition-transform hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+        Join the Revolution
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="waitlist" class="px-6 py-20 border-t border-white/10 bg-black relative">
+    <div class="max-w-4xl mx-auto text-center mb-16">
+      <h3 class="text-2xl font-bold mb-6">Join the Waitlist</h3>
+      <form id="waitlistForm" class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <input type="text" name="name" required placeholder="Full name"
+          class="w-full sm:w-64 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-sm outline-none focus:border-[#00C6FF] transition-colors" />
+        <input type="email" name="email" required placeholder="Email address"
+          class="w-full sm:w-80 bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-sm outline-none focus:border-[#0096C7] transition-colors" />
+        <button type="submit"
+          class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-[#00C6FF] to-[#0096C7] font-semibold hover:opacity-90 transition-transform active:scale-95 shadow-[0_0_20px_rgba(0,198,255,0.4)]">
+          Join Now
+        </button>
+      </form>
+
+      <!-- Success Popup -->
+      <div id="successMsg"
+        class="hidden mt-6 p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-sm inline-block">
+        ✅ You’re registered! We’ll keep you posted.
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-10 border-t border-white/5 pt-16 text-left">
+      <div>
+        <h3 class="text-xl font-bold mb-4 text-[#00C6FF]">Croevo AI</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">
+          Empowering creators to build the future of gaming with AI.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Product</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Showcase</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Company</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+          <li><a href="/careers.html" class="hover:text-white transition-colors">Careers</a></li>
+          <li><a href="/team.html" class="hover:text-white transition-colors">Team</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-4">Connect</h4>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li><a href="#" class="hover:text-white transition-colors">Twitter</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-16 text-center text-gray-500 text-sm">
+      &copy; 2024 Croevo AI. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ================= GSAP ================= -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from(".hero", { opacity: 0, y: 50, duration: 1.2, ease: "power3.out" });
+    // Animate features individually for better reliability
+    gsap.utils.toArray(".feature").forEach((feature, i) => {
+      gsap.from(feature, {
+        scrollTrigger: {
+          trigger: feature,
+          start: "top 90%", // Trigger when the top of the card hits the bottom 90% of viewport
+          toggleActions: "play none none none" // Play once
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      });
+    });
+    gsap.from(".cta", {
+      scrollTrigger: { trigger: ".cta", start: "top 80%" },
+      scale: 0.95, opacity: 0, duration: 1, ease: "back.out(1.7)"
+    });
+  </script>
+
+  <script>
+    const form = document.getElementById("waitlistForm");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        await fetch("https://script.google.com/macros/s/AKfycbxwKt-bJ_UsB-UNBWJObBh7EvcjuvBY16rkotAH8JVnoDebravr6_Z4FrLhmgjDxSwu/exec", {
+          method: "POST",
+          body: formData,
+          mode: "no-cors"
+        });
+
+        successMsg.classList.remove("hidden");
+        gsap.from(successMsg, { y: 10, opacity: 0 });
+        form.reset();
+
+      } catch (error) {
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  </script>
+
+  <!-- Mouse Glow -->
+  <div id="mouseGlow"></div>
+
+  <style>
+    #mouseGlow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle,
+          rgba(0, 198, 255, 0.25),
+          rgba(0, 198, 255, 0.12),
+          transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      filter: blur(20px);
+    }
+  </style>
+
+  <!-- Mouse Glow & Header Logic -->
+  <script>
+    // Mouse Glow
+    const glow = document.getElementById("mouseGlow");
+    // The if (glow) check is no longer strictly necessary if the div is always present,
+    // but keeping it doesn't hurt and makes the script more robust if the HTML changes.
+    if (glow) {
+      window.addEventListener("mousemove", (e) => {
+        glow.style.left = e.clientX + "px";
+        glow.style.top = e.clientY + "px";
+      });
+    }
+
+    // Scroll Spy
+    const sections = document.querySelectorAll("section[id], footer[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    function onScroll() {
+      let current = "";
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop; // Adjusted offset logic
+        const sectionHeight = section.clientHeight;
+        // Check if we are within the section with some buffer (e.g. 1/3 down the window)
+        if (scrollY >= (sectionTop - window.innerHeight / 3)) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove("text-white", "font-bold");
+        link.classList.add("text-gray-400");
+        if (link.getAttribute("href") === "#" + current) {
+          link.classList.remove("text-gray-400");
+          link.classList.add("text-white", "font-bold");
+        }
+      });
+
+      // Header background opacity on scroll
+      const header = document.querySelector("header");
+      if (scrollY > 50) {
+        header.classList.add("bg-black/80", "border-white/10");
+        header.classList.remove("bg-black/60", "border-transparent");
+      } else {
+        header.classList.add("bg-black/60", "border-white/5");
+        header.classList.remove("bg-black/80", "border-white/10");
+      }
+    }
+
+    window.addEventListener("scroll", onScroll);
+  </script>
+
+
+</body>
+
+</html>

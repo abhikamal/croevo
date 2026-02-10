@@ -1,0 +1,58 @@
+{
+  "team": [
+    {
+      "id": 1,
+      "name": "Alex Chen",
+      "role": "Founder & CEO",
+      "bio": "Visionary leader with 10+ years in AI and Game Dev.",
+      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
+    },
+    {
+      "id": 2,
+      "name": "Abhinav",
+      "role": "CTO",
+      "bio": "Expert in Generative Adversarial Networks.",
+      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+    },
+    {
+      "id": 3,
+      "name": "Michael Brown",
+      "role": "Lead Game Designer",
+      "bio": "Creating immersive worlds for over a decade.",
+      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
+    }
+  ],
+  "careers": [
+    {
+      "id": 1,
+      "title": "AI Engineer",
+      "location": "remote",
+      "type": "Full-time",
+      "description": "Join our core AI team to build the next generation of generative models.",
+      "applyUrl": "https://docs.google.com/forms/d/e/1FAIpQLScaf7MMryg7RRSUHJ9j-cKDxqKfYK3f3qUb7Kef7GUpfYlYTQ/viewform?usp=sf_link"
+    },
+    {
+      "id": 2,
+      "title": "Frontend Developer",
+      "location": "remote",
+      "type": "Full-time",
+      "description": "Build beautiful and intuitive interfaces for our game creation tools.",
+      "applyUrl": "https://docs.google.com/forms/d/e/1FAIpQLScaf7MMryg7RRSUHJ9j-cKDxqKfYK3f3qUb7Kef7GUpfYlYTQ/viewform?usp=sf_link"
+    },
+    {
+      "id": 3,
+      "title": "Community Manager",
+      "location": "Remote",
+      "type": "Contract",
+      "description": "Help us grow and engage with our vibrant community of creators.",
+      "applyUrl": "https://docs.google.com/forms/d/e/1FAIpQLScaf7MMryg7RRSUHJ9j-cKDxqKfYK3f3qUb7Kef7GUpfYlYTQ/viewform?usp=sf_link"
+    },
+    {
+      "title": "Backend engineer",
+      "location": "Remote",
+      "type": "Full-time",
+      "description": "Join our core team to develop a clean backend system and pipelines ",
+      "applyUrl": "https://forms.google.com/example"
+    }
+  ]
+}

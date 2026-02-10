@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Croevo AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #050505;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden">
+    <header class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+            <h1 class="text-xl font-bold text-[#00C6FF] flex items-center gap-3">
+                <a href="/" class="flex items-center gap-3 hover:opacity-80 transition">
+                    <img src="logo.svg" alt="Croevo AI" class="w-8 h-8">
+                    Croevo AI
+                </a>
+            </h1>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="/" class="hover:text-[#00C6FF] transition-colors">Home</a>
+                <a href="/team.html" class="hover:text-[#00C6FF] transition-colors">Team</a>
+                <a href="/careers.html" class="text-white font-bold">Careers</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="h-24"></div>
+
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <span class="text-[#00C6FF] font-semibold tracking-wider uppercase text-sm">Join Us</span>
+            <h2 class="text-4xl md:text-5xl font-bold mt-4">Build the Future</h2>
+            <p class="mt-4 text-gray-400 max-w-2xl mx-auto">We're looking for passionate individuals to join our
+                mission.</p>
+        </div>
+
+        <div id="careers-grid" class="max-w-5xl mx-auto space-y-4">
+            <!-- Job listings will be injected here -->
+            <div class="text-center text-gray-500">Loading benefits...</div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center text-gray-600 text-sm border-t border-white/5 mt-20">
+        &copy; 2024 Croevo AI.
+    </footer>
+
+    <script>
+        async function loadCareers() {
+            try {
+                const response = await fetch('/api/content');
+                const data = await response.json();
+                const container = document.getElementById('careers-grid');
+
+                if (data.careers && data.careers.length > 0) {
+                    container.innerHTML = data.careers.map(job => `
+                        <div class="group bg-white/5 border border-white/10 rounded-xl p-8 hover:bg-white/10 transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-white group-hover:text-[#00C6FF] transition-colors">${job.title}</h3>
+                                <div class="flex gap-4 mt-2 text-sm text-gray-400">
+                                    <span class="flex items-center gap-1">📍 ${job.location}</span>
+                                    <span class="flex items-center gap-1">💼 ${job.type}</span>
+                                </div>
+                                <p class="mt-4 text-gray-300 text-sm max-w-2xl">${job.description}</p>
+                            </div>
+                            <a href="${job.applyUrl || '#'}" target="_blank" class="px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-[#00C6FF] hover:text-black hover:border-transparent transition-all whitespace-nowrap text-center text-white">
+                                Apply Now
+                            </a>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div class="text-center text-gray-500">No open positions at the moment.</div>';
+                }
+            } catch (err) {
+                console.error("Failed to load careers:", err);
+                document.getElementById('careers-grid').innerHTML = '<div class="text-center text-red-400">Failed to load job listings.</div>';
+            }
+        }
+        loadCareers();
+    </script>
+</body>
+
+</html>
