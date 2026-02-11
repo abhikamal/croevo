@@ -1,8 +1,9 @@
 {
   "name": "webpage",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +12,11 @@
   "description": "",
   "dependencies": {
     "body-parser": "^2.2.2",
-    "express": "^5.2.1"
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.0"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
