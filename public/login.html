@@ -56,6 +56,7 @@
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
 
             try {
                 const response = await fetch('/api/login', {
@@ -67,14 +68,18 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    sessionStorage.setItem('adminToken', data.token); // Simple session storage
+                    sessionStorage.setItem('adminToken', data.token);
+                    sessionStorage.setItem('refreshToken', data.refreshToken);
                     window.location.href = '/admin.html';
                 } else {
-                    document.getElementById('errorMsg').classList.remove('hidden');
+                    // Show specific error message from API
+                    errorMsg.textContent = data.message || data.error || 'Invalid credentials';
+                    errorMsg.classList.remove('hidden');
                 }
             } catch (err) {
                 console.error("Login error:", err);
-                alert("An error occurred during login.");
+                errorMsg.textContent = `Network error: ${err.message}. Please check if the API is accessible.`;
+                errorMsg.classList.remove('hidden');
             }
         });
     </script>

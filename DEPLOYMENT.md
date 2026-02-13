@@ -121,18 +121,30 @@ The project includes `vercel.json`:
   "version": 2,
   "builds": [
     {
-      "src": "server.js",
+      "src": "functions/api.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "/functions/api.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/public/$1"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
 ```
+
 
 ---
 
