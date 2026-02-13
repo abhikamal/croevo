@@ -1,1 +1,17 @@
-const crypto = require('crypto'); \n\n/**\n * Request ID middleware\n * Adds a unique ID to each request for better log tracing\n */\nconst requestId = (req, res, next) => { \n    // Generate unique request ID\n    req.id = crypto.randomBytes(8).toString('hex');\n    \n    // Add to response headers for client tracking\n    res.setHeader('X-Request-ID', req.id);\n    \n    next();\n};\n\nmodule.exports = requestId;\n
+const crypto = require('crypto');
+
+/**
+ * Request ID middleware
+ * Adds a unique ID to each request for better log tracing
+ */
+const requestId = (req, res, next) => {
+    // Generate unique request ID
+    req.id = crypto.randomBytes(8).toString('hex');
+
+    // Add to response headers for client tracking
+    res.setHeader('X-Request-ID', req.id);
+
+    next();
+};
+
+module.exports = requestId;
