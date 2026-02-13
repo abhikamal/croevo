@@ -1,116 +1,79 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const path = require('path');
-require('dotenv').config();
+const compression = require('compression');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const config = require('./config');
+const { logger, requestLogger } = require('./middleware/logger');
+const corsMiddleware = require('./middleware/cors');
+const requestId = require('./middleware/requestId');
+
+// Import routes
+const { router: authRouter } = require('./routes/auth');
+const contentRouter = require('./routes/content');
+const seedRouter = require('./routes/seed');
+const healthRouter = require('./routes/health');
+
+const { errorHandler, notFoundHandler, handleUncaughtException, handleUnhandledRejection } = require('./middleware/errorHandler');
+
+// Handle uncaught exceptions and unhandled rejections
+handleUncaughtException();
+handleUnhandledRejection();
 
 const app = express();
-const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
-app.use(express.json());
-app.use(express.static('public'));
+app.use(requestId); // Add unique ID to each request
+app.use(requestLogger); // Winston request logging
+app.use(express.json({ limit: config.REQUEST_BODY_LIMIT })); // Body parser with size limit
+app.use(express.static('public')); // Static files
+app.use(compression()); // Response compression
+
+// Security Middleware
+app.use(helmet()); // Security headers
+app.use(corsMiddleware); // CORS (Express 5 compatible)
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: config.RATE_LIMIT_WINDOW_MS,
+    max: config.RATE_LIMIT_MAX,
+    message: 'Too many requests from this IP, please try again later.'
+});
+app.use(limiter);
 
 // MongoDB Connection
-if (!MONGODB_URI) {
-    console.error("MONGODB_URI is not defined in environment variables.");
+if (!config.MONGODB_URI) {
+    logger.error('MONGODB_URI is not defined in environment variables');
+    process.exit(1);
 } else {
-    mongoose.connect(MONGODB_URI)
-        .then(() => console.log('Connected to MongoDB'))
-        .catch(err => console.error('MongoDB connection error:', err));
+    mongoose.connect(config.MONGODB_URI)
+        .then(() => logger.info('Connected to MongoDB'))
+        .catch(err => {
+            logger.error('MongoDB connection error', { error: err.message });
+            process.exit(1);
+        });
 }
 
-// Schemas
-const TeamMemberSchema = new mongoose.Schema({
-    name: String,
-    role: String,
-    bio: String,
-    image: String
-});
+// Routes
+app.use('/api', authRouter);
+app.use('/api', contentRouter);
+app.use('/api', seedRouter);
+app.use(healthRouter);
 
-const JobPostingSchema = new mongoose.Schema({
-    title: String,
-    location: String,
-    type: { type: String, enum: ['Full-time', 'Part-time', 'Contract'] },
-    description: String,
-    applyUrl: String
-});
+// 404 Handler (must be after all routes)
+app.use(notFoundHandler);
 
-const TeamMember = mongoose.model('TeamMember', TeamMemberSchema);
-const JobPosting = mongoose.model('JobPosting', JobPostingSchema);
+// Global Error Handler (must be last)
+app.use(errorHandler);
 
-// API: Get Content
-app.get('/api/content', async (req, res) => {
-    try {
-        const team = await TeamMember.find();
-        const careers = await JobPosting.find();
-        res.json({ team, careers });
-    } catch (err) {
-        console.error("Error fetching content:", err);
-        res.status(500).json({ error: 'Failed to fetch content' });
-    }
-});
-
-// API: Login (Simple hardcoded check for now - consider moving to separate DB or Auth provider)
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    // Env vars for credentials recommended
-    const adminUser = process.env.ADMIN_USER || 'admin';
-    const adminPass = process.env.ADMIN_PASS || 'password123';
-
-    if (username === adminUser && password === adminPass) {
-        res.json({ success: true, token: 'fake-session-token' });
-    } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-});
-
-// API: Update Content (Protected)
-// Note: This endpoint now needs to handle separate updates for team/careers or bulk updates.
-// For simplicity, keeping a similar structure but recommending specific endpoints.
-app.post('/api/content', async (req, res) => {
-    const { team, careers } = req.body;
-
-    // Detailed implementation depends on how frontend sends data. 
-    // Assuming full replace for simplicity to match previous behavior (NOT RECOMMENDED for production with large data)
-
-    try {
-        if (team) {
-            await TeamMember.deleteMany({});
-            await TeamMember.insertMany(team);
-        }
-        if (careers) {
-            await JobPosting.deleteMany({});
-            await JobPosting.insertMany(careers);
-        }
-        res.json({ success: true });
-    } catch (err) {
-        console.error("Error updating content:", err);
-        res.status(500).json({ success: false, message: 'Failed to save data' });
-    }
-});
-
-// Seed Endpoint (Optional: to populate initial data)
-app.post('/api/seed', async (req, res) => {
-    try {
-        const count = await TeamMember.countDocuments();
-        if (count === 0) {
-            const initialData = require('./data/content.json');
-            await TeamMember.insertMany(initialData.team);
-            await JobPosting.insertMany(initialData.careers);
-            return res.json({ message: 'Database seeded' });
-        }
-        res.json({ message: 'Database already has data' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-const PORT = process.env.PORT || 3000;
+// Start server
 if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
+    app.listen(config.PORT, () => {
+        logger.info(`Server running on port ${config.PORT}`, {
+            environment: config.NODE_ENV,
+            port: config.PORT
+        });
     });
 }
 
 module.exports = app;
-
