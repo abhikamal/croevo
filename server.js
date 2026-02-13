@@ -13,6 +13,7 @@ const { router: authRouter } = require('./routes/auth');
 const contentRouter = require('./routes/content');
 const seedRouter = require('./routes/seed');
 const healthRouter = require('./routes/health');
+const debugRouter = require('./routes/debug');
 
 const { errorHandler, notFoundHandler, handleUncaughtException, handleUnhandledRejection } = require('./middleware/errorHandler');
 
@@ -58,6 +59,7 @@ if (!config.MONGODB_URI) {
 app.use('/api', authRouter);
 app.use('/api', contentRouter);
 app.use('/api', seedRouter);
+app.use('/api', debugRouter);
 app.use(healthRouter);
 
 // 404 Handler (must be after all routes)

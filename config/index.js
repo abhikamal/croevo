@@ -1,4 +1,13 @@
+// Load environment variables
 require('dotenv').config({ debug: process.env.NODE_ENV !== 'production' });
+
+// Debug logging for Netlify (will show in function logs)
+if (process.env.NETLIFY) {
+    console.log('[CONFIG] Running on Netlify');
+    console.log('[CONFIG] ADMIN_USER:', process.env.ADMIN_USER ? 'SET' : 'NOT SET');
+    console.log('[CONFIG] ADMIN_PASS:', process.env.ADMIN_PASS ? 'SET' : 'NOT SET');
+    console.log('[CONFIG] JWT_SECRET:', process.env.JWT_SECRET ? 'SET' : 'NOT SET');
+}
 
 module.exports = {
     // Server

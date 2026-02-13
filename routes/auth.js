@@ -33,6 +33,16 @@ setInterval(() => {
 router.post('/login', validateLogin, handleValidationErrors, asyncHandler(async (req, res) => {
     const { username, password } = req.body;
 
+    // Debug logging (REMOVE IN PRODUCTION!)
+    console.log('[LOGIN] Attempt:', {
+        receivedUsername: username,
+        receivedPasswordLength: password ? password.length : 0,
+        expectedUsername: config.ADMIN_USER,
+        expectedPasswordLength: config.ADMIN_PASS ? config.ADMIN_PASS.length : 0,
+        usernameMatch: username === config.ADMIN_USER,
+        passwordMatch: password === config.ADMIN_PASS
+    });
+
     // Check credentials
     const usernameMatch = username === config.ADMIN_USER;
 
