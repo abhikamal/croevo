@@ -65,9 +65,22 @@
                     body: JSON.stringify({ username, password })
                 });
 
-                const data = await response.json();
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                let data;
 
-                if (data.success) {
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    // Handle non-JSON responses (e.g., HTML error pages)
+                    const text = await response.text();
+                    console.error('Non-JSON response:', text);
+                    errorMsg.textContent = 'Server error. Please try again later or contact support.';
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                if (response.ok && data.success) {
                     sessionStorage.setItem('adminToken', data.token);
                     sessionStorage.setItem('refreshToken', data.refreshToken);
                     window.location.href = '/admin.html';
