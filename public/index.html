@@ -711,6 +711,21 @@
   </script>
 
 
+  <script>
+    // Force cleanup of any old Service Workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        for (let registration of registrations) {
+          console.log('Unregistering Service Worker:', registration);
+          registration.unregister();
+        }
+        if (registrations.length > 0) {
+          console.log('Old Service Workers found and unregistered. Reloading...');
+          window.location.reload();
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>
