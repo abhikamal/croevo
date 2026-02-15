@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning Cache...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black text-white flex items-center justify-center h-screen flex-col text-center p-4">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mb-8"></div>
+    <h1 class="text-2xl font-bold mb-4">Fixing your connection...</h1>
+    <p class="text-gray-400 mb-8">We are clearing old cached files that are preventing you from logging in.</p>
+    <div id="status" class="text-blue-400">Please wait...</div>
+
+    <script>
+        // Double tap: JS clearing just in case header missed something
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+        caches.keys().then(names => {
+            for (let name of names) caches.delete(name);
+        });
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Redirect after cleanup
+        setTimeout(() => {
+            document.getElementById('status').innerText = "Done! Redirecting...";
+            // Force a hard reload to the login page
+            window.location.href = '/admin-login.html?t=' + Date.now();
+        }, 2000);
+    </script>
+</body>
+
+</html>

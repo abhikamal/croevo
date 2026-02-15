@@ -8,6 +8,15 @@
     ],
     "headers": [
         {
+            "source": "/clear-cache.html",
+            "headers": [
+                {
+                    "key": "Clear-Site-Data",
+                    "value": "\"cache\", \"cookies\", \"storage\", \"executionContexts\""
+                }
+            ]
+        },
+        {
             "source": "/(.*).html",
             "headers": [
                 {
