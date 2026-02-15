@@ -1,80 +1,76 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const compression = require('compression');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const config = require('./config');
-const { logger, requestLogger } = require('./middleware/logger');
-const corsMiddleware = require('./middleware/cors');
-const requestId = require('./middleware/requestId');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
 
-// Import routes
-const { router: authRouter } = require('./routes/auth');
-const contentRouter = require('./routes/content');
-const seedRouter = require('./routes/seed');
-const healthRouter = require('./routes/health');
-const debugRouter = require('./routes/debug');
+// Configuration
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-const { errorHandler, notFoundHandler, handleUncaughtException, handleUnhandledRejection } = require('./middleware/errorHandler');
-
-// Handle uncaught exceptions and unhandled rejections
-handleUncaughtException();
-handleUnhandledRejection();
-
+// Initialize Express
 const app = express();
 
 // Middleware
-app.use(requestId); // Add unique ID to each request
-app.use(requestLogger); // Winston request logging
-app.use(express.json({ limit: config.REQUEST_BODY_LIMIT })); // Body parser with size limit
-app.use(express.static('public')); // Static files
-app.use(compression()); // Response compression
+app.use(cors()); // Allow all origins by default for now to avoid CORS issues
+app.use(express.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Security Middleware
-app.use(helmet()); // Security headers
-app.use(corsMiddleware); // CORS (Express 5 compatible)
-
-// Rate Limiting
-const limiter = rateLimit({
-    windowMs: config.RATE_LIMIT_WINDOW_MS,
-    max: config.RATE_LIMIT_MAX,
-    message: 'Too many requests from this IP, please try again later.'
+// Logging Middleware
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
 });
-app.use(limiter);
 
-// MongoDB Connection
-if (!config.MONGODB_URI) {
-    logger.error('MONGODB_URI is not defined in environment variables');
+// Database Connection
+if (!MONGODB_URI) {
+    console.error('❌ MONGODB_URI is not defined in .env');
     process.exit(1);
-} else {
-    mongoose.connect(config.MONGODB_URI)
-        .then(() => logger.info('Connected to MongoDB'))
-        .catch(err => {
-            logger.error('MongoDB connection error', { error: err.message });
-            process.exit(1);
-        });
 }
 
-// Routes
-app.use('/api', authRouter);
-app.use('/api', contentRouter);
-app.use('/api', seedRouter);
-app.use('/api', debugRouter);
-app.use(healthRouter);
+mongoose.connect(MONGODB_URI)
+    .then(() => console.log('✅ Connected to MongoDB'))
+    .catch(err => {
+        console.error('❌ MongoDB connection error:', err);
+        process.exit(1);
+    });
 
-// 404 Handler (must be after all routes)
-app.use(notFoundHandler);
+// Import Routes
+const authRoute = require('./routes/auth');
+const contentRoute = require('./routes/content');
 
-// Global Error Handler (must be last)
-app.use(errorHandler);
+// Use Routes
+app.use('/api', authRoute);
+app.use('/api', contentRoute);
 
-// Start server
+// Basic Health Check
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date() });
+});
+
+// 404 Handler
+app.use((req, res) => {
+    if (req.path.startsWith('/api')) {
+        res.status(404).json({ error: 'API endpoint not found' });
+    } else {
+        res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
+    }
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('🔥 Global Error:', err.stack);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message
+    });
+});
+
+// Start Server
 if (require.main === module) {
-    app.listen(config.PORT, () => {
-        logger.info(`Server running on port ${config.PORT}`, {
-            environment: config.NODE_ENV,
-            port: config.PORT
-        });
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        console.log(`👉 http://localhost:${PORT}`);
     });
 }
 

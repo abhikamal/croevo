@@ -1,182 +1,70 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const config = require('../config');
-const { logger } = require('../middleware/logger');
-const { validateLogin, validateRefreshToken, handleValidationErrors } = require('../middleware/validation');
-const { asyncHandler } = require('../middleware/errorHandler');
 
-// Refresh token storage with expiration tracking
-const refreshTokens = new Map(); // Map<token, expiryTimestamp>
+// Configuration
+const ADMIN_ACCESS_ID = process.env.ADMIN_ACCESS_ID || 'admin-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_123';
 
-// Cleanup expired tokens every hour
-setInterval(() => {
-    const now = Date.now();
-    let cleaned = 0;
-
-    for (const [token, expiry] of refreshTokens.entries()) {
-        if (now > expiry) {
-            refreshTokens.delete(token);
-            cleaned++;
-        }
-    }
-
-    if (cleaned > 0) {
-        logger.info('Cleaned up expired refresh tokens', { count: cleaned });
-    }
-}, 60 * 60 * 1000); // Run every hour
+console.log('🔒 Auth Config Loaded');
+console.log(`   - Admin ID configured: ${!!process.env.ADMIN_ACCESS_ID}`);
 
 /**
  * POST /api/login
- * Authenticate user and return access + refresh tokens
+ * Simple login with Access ID
  */
-// ... (imports remain)
-router.post('/login', validateLogin, handleValidationErrors, asyncHandler(async (req, res) => {
-    const { accessId } = req.body;
+router.post('/login', (req, res) => {
+    try {
+        const { accessId } = req.body;
 
-    // Debug logging (REMOVE IN PRODUCTION!)
-    console.log('[LOGIN] Attempt:', {
-        receivedAccessIdLength: accessId ? accessId.length : 0,
-        expectedAccessIdLength: config.ADMIN_ACCESS_ID ? config.ADMIN_ACCESS_ID.length : 0,
-        match: accessId === config.ADMIN_ACCESS_ID
-    });
+        if (!accessId) {
+            return res.status(400).json({ error: 'Access ID is required' });
+        }
 
-    // Check credentials
-    const accessIdMatch = accessId === config.ADMIN_ACCESS_ID;
+        // Direct comparison
+        if (accessId === ADMIN_ACCESS_ID) {
+            // Generate token (valid for 24 hours)
+            const token = jwt.sign(
+                { role: 'admin' },
+                JWT_SECRET,
+                { expiresIn: '24h' }
+            );
 
-    if (accessIdMatch) {
-        // Generate access token (using 'admin' as generic username)
-        const accessToken = jwt.sign(
-            { username: 'admin' },
-            config.JWT_SECRET,
-            { expiresIn: config.JWT_EXPIRES_IN }
-        );
-
-        // Generate refresh token
-        const refreshToken = jwt.sign(
-            { username: 'admin', type: 'refresh' },
-            config.JWT_SECRET,
-            { expiresIn: config.JWT_REFRESH_EXPIRES_IN }
-        );
-
-        // Store refresh token with expiration (7 days)
-        const expiryTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
-        refreshTokens.set(refreshToken, expiryTime);
-
-        logger.info('Login successful', { user: 'admin' });
-
-        res.json({
-            success: true,
-            token: accessToken,
-            refreshToken: refreshToken
-        });
-    } else {
-        logger.warn('Login failed - invalid access ID');
-        res.status(401).json({
-            success: false,
-            error: 'Invalid credentials',
-            message: 'Access ID is incorrect'
-        });
+            console.log('✅ Login successful');
+            return res.json({
+                success: true,
+                token: token,
+                message: 'Logged in successfully'
+            });
+        } else {
+            console.warn('⚠️  Invalid login attempt');
+            return res.status(401).json({ error: 'Invalid Access ID' });
+        }
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).json({ error: 'Server error during login' });
     }
-}));
-
-/**
- * POST /api/refresh
- * Refresh access token using refresh token
- */
-router.post('/refresh', validateRefreshToken, handleValidationErrors, asyncHandler(async (req, res) => {
-    const { refreshToken } = req.body;
-
-    // Check if token exists and is not expired
-    const expiry = refreshTokens.get(refreshToken);
-    if (!expiry) {
-        return res.status(403).json({
-            error: 'Invalid token',
-            message: 'Refresh token not found or already used'
-        });
-    }
-
-    if (Date.now() > expiry) {
-        refreshTokens.delete(refreshToken);
-        return res.status(403).json({
-            error: 'Token expired',
-            message: 'Refresh token has expired'
-        });
-    }
-
-    const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
-
-    if (decoded.type !== 'refresh') {
-        return res.status(403).json({
-            error: 'Invalid token type',
-            message: 'Token is not a refresh token'
-        });
-    }
-
-    // Generate new access token
-    const accessToken = jwt.sign(
-        { username: decoded.username },
-        config.JWT_SECRET,
-        { expiresIn: config.JWT_EXPIRES_IN }
-    );
-
-    logger.info('Access token refreshed', { username: decoded.username });
-
-    res.json({
-        success: true,
-        token: accessToken
-    });
-}));
-
-/**
- * POST /api/logout
- * Invalidate refresh token
- */
-router.post('/logout', (req, res) => {
-    const { refreshToken } = req.body;
-
-    if (refreshToken) {
-        refreshTokens.delete(refreshToken);
-        logger.info('User logged out', { tokenRemoved: true });
-    }
-
-    res.json({ success: true, message: 'Logged out successfully' });
 });
 
 /**
- * Middleware to verify JWT access token
+ * Middleware: Verify Token
  */
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
 
     if (!token) {
-        return res.status(403).json({
-            error: 'No token provided',
-            message: 'Authorization header is required'
-        });
+        return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
 
-    // Validate Bearer token format
-    if (!token.startsWith('Bearer ') || token.split(' ').length !== 2) {
-        return res.status(401).json({
-            error: 'Invalid token format',
-            message: 'Authorization header must be in format: Bearer <token>'
-        });
-    }
-
-    const bearerToken = token.split(' ')[1];
-
-    jwt.verify(bearerToken, config.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            logger.error('Token verification error', { error: err.message });
-            return res.status(401).json({
-                error: 'Authentication failed',
-                message: 'Token is invalid or expired'
-            });
-        }
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
-    });
+    } catch (error) {
+        return res.status(403).json({ error: 'Invalid or expired token' });
+    }
 };
 
-module.exports = { router, verifyToken };
+module.exports = router;
+module.exports.verifyToken = verifyToken;
