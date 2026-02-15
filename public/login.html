@@ -62,6 +62,10 @@
         }
     </script>
     <script>
+        // Clear old tokens on load to ensure fresh login
+        sessionStorage.removeItem('adminToken');
+        sessionStorage.removeItem('refreshToken');
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             // ... (keep existing logic) ...
             e.preventDefault();
