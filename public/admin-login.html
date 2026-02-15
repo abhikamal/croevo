@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Croevo AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #050505;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w-full max-w-md p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-white">Admin Login</h1>
+            <p class="text-gray-400 text-sm mt-2">Enter your credentials to access the dashboard</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                <input type="text" id="username" required
+                    class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00C6FF] transition-colors">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                <input type="password" id="password" required
+                    class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#0096C7] transition-colors">
+            </div>
+
+            <div id="errorMsg" class="text-red-400 text-sm text-center hidden">Invalid credentials</div>
+
+            <button type="submit"
+                class="w-full py-3 rounded-lg bg-gradient-to-r from-[#00C6FF] to-[#0096C7] font-bold text-black hover:opacity-90 transition-transform active:scale-95">
+                Login
+            </button>
+        </form>
+        <div class="mt-6 text-center">
+            <a href="/" class="text-sm text-gray-500 hover:text-white transition-colors">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Force cleanup of any old Service Workers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    console.log('Unregistering Service Worker:', registration);
+                    registration.unregister();
+                }
+                if (registrations.length > 0) {
+                    console.log('Old Service Workers found and unregistered. Reloading...');
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            // ... (keep existing logic) ...
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            try {
+                const response = await fetch('/api/login?v=' + Date.now(), { // Cache bust API call
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                let data;
+
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    // Handle non-JSON responses (e.g., HTML error pages)
+                    const text = await response.text();
+                    console.error('Non-JSON response:', text);
+                    errorMsg.textContent = 'Server error. Please try again later or contact support.';
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                if (response.ok && data.success) {
+                    sessionStorage.setItem('adminToken', data.token);
+                    sessionStorage.setItem('refreshToken', data.refreshToken);
+                    window.location.href = '/admin.html?v=' + Date.now(); // Cache bust redirect
+                } else {
+                    // Show specific error message from API
+                    errorMsg.textContent = data.message || data.error || 'Invalid credentials';
+                    errorMsg.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Login error:", err);
+                errorMsg.textContent = `Network error: ${err.message}. Please check if the API is accessible.`;
+                errorMsg.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
