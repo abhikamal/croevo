@@ -20,8 +20,7 @@ if (args.length === 0) {
 }
 
 const DOMAIN = args[0].replace(/\/$/, ''); // Remove trailing slash
-const ADMIN_USER = args[1] || 'admin';
-const ADMIN_PASS = args[2] || 'password123';
+const ADMIN_ACCESS_ID = args[1] || 'admin-secret-key';
 
 console.log('🚀 Testing Vercel Deployment...\n');
 console.log(`Domain: ${DOMAIN}`);
@@ -109,7 +108,7 @@ async function runTests() {
         const result = await makeRequest(`${DOMAIN}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: ADMIN_USER, password: ADMIN_PASS })
+            body: JSON.stringify({ accessId: ADMIN_ACCESS_ID })
         });
 
         if (result.status === 200 && result.data.success) {

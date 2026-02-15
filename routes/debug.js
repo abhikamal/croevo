@@ -9,16 +9,12 @@ const config = require('../config');
 router.get('/debug/env', (req, res) => {
     res.json({
         environment: config.NODE_ENV,
-        adminUserSet: !!config.ADMIN_USER,
-        adminUserValue: config.ADMIN_USER, // TEMPORARY - for debugging only
-        adminPassSet: !!config.ADMIN_PASS,
-        adminPassLength: config.ADMIN_PASS ? config.ADMIN_PASS.length : 0,
+        adminAccessIdSet: !!config.ADMIN_ACCESS_ID,
         jwtSecretSet: !!config.JWT_SECRET,
         mongoUriSet: !!config.MONGODB_URI,
         isNetlify: !!process.env.NETLIFY,
         envVars: {
-            ADMIN_USER: process.env.ADMIN_USER || 'NOT SET',
-            ADMIN_PASS: process.env.ADMIN_PASS ? 'SET (length: ' + process.env.ADMIN_PASS.length + ')' : 'NOT SET',
+            ADMIN_ACCESS_ID: process.env.ADMIN_ACCESS_ID ? 'SET (length: ' + process.env.ADMIN_ACCESS_ID.length + ')' : 'NOT SET',
             JWT_SECRET: process.env.JWT_SECRET ? 'SET' : 'NOT SET',
             MONGODB_URI: process.env.MONGODB_URI ? 'SET' : 'NOT SET'
         }

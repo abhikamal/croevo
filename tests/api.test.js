@@ -44,8 +44,7 @@ describe('API Tests', () => {
                 const response = await request(app)
                     .post('/api/login')
                     .send({
-                        username: process.env.ADMIN_USER || 'admin',
-                        password: process.env.ADMIN_PASS || 'password123'
+                        accessId: process.env.ADMIN_ACCESS_ID || 'admin-secret-key'
                     });
 
                 expect(response.status).toBe(200);
@@ -97,8 +96,7 @@ describe('API Tests', () => {
                 const loginResponse = await request(app)
                     .post('/api/login')
                     .send({
-                        username: process.env.ADMIN_USER || 'admin',
-                        password: process.env.ADMIN_PASS || 'password123'
+                        accessId: process.env.ADMIN_ACCESS_ID || 'admin-secret-key'
                     });
                 refreshToken = loginResponse.body.refreshToken;
             });
@@ -139,8 +137,7 @@ describe('API Tests', () => {
             const loginResponse = await request(app)
                 .post('/api/login')
                 .send({
-                    username: process.env.ADMIN_USER || 'admin',
-                    password: process.env.ADMIN_PASS || 'password123'
+                    accessId: process.env.ADMIN_ACCESS_ID || 'admin-secret-key'
                 });
             authToken = loginResponse.body.token;
 
