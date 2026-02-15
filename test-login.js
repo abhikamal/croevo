@@ -2,8 +2,7 @@
 const http = require('http');
 
 const data = JSON.stringify({
-    username: 'admin',
-    password: 'password123'
+    accessId: 'admin-secret-key'
 });
 
 const options = {
@@ -18,7 +17,7 @@ const options = {
 };
 
 console.log('Testing login endpoint...');
-console.log('Sending credentials: username=admin, password=password123');
+console.log('Sending credentials: accessId=admin-secret-key');
 
 const req = http.request(options, (res) => {
     console.log(`Status Code: ${res.statusCode}`);

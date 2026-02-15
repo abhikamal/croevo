@@ -21,8 +21,7 @@ module.exports = {
     JWT_SECRET: process.env.JWT_SECRET || 'fallback_secret_123',
     JWT_EXPIRES_IN: '1h',
     JWT_REFRESH_EXPIRES_IN: '7d',
-    ADMIN_USER: process.env.ADMIN_USER || 'admin',
-    ADMIN_PASS: process.env.ADMIN_PASS || 'password123',
+    ADMIN_ACCESS_ID: process.env.ADMIN_ACCESS_ID || 'admin-secret-key',
 
     // Security
     RATE_LIMIT_WINDOW_MS: 15 * 60 * 1000, // 15 minutes

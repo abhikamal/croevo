@@ -30,37 +30,31 @@ setInterval(() => {
  * POST /api/login
  * Authenticate user and return access + refresh tokens
  */
+// ... (imports remain)
 router.post('/login', validateLogin, handleValidationErrors, asyncHandler(async (req, res) => {
-    const { username, password } = req.body;
+    const { accessId } = req.body;
 
     // Debug logging (REMOVE IN PRODUCTION!)
     console.log('[LOGIN] Attempt:', {
-        receivedUsername: username,
-        receivedPasswordLength: password ? password.length : 0,
-        expectedUsername: config.ADMIN_USER,
-        expectedPasswordLength: config.ADMIN_PASS ? config.ADMIN_PASS.length : 0,
-        usernameMatch: username === config.ADMIN_USER,
-        passwordMatch: password === config.ADMIN_PASS
+        receivedAccessIdLength: accessId ? accessId.length : 0,
+        expectedAccessIdLength: config.ADMIN_ACCESS_ID ? config.ADMIN_ACCESS_ID.length : 0,
+        match: accessId === config.ADMIN_ACCESS_ID
     });
 
     // Check credentials
-    const usernameMatch = username === config.ADMIN_USER;
+    const accessIdMatch = accessId === config.ADMIN_ACCESS_ID;
 
-    // For now, using plain text comparison
-    // TODO: Implement bcrypt hashing for stored passwords
-    const passwordMatch = password === config.ADMIN_PASS;
-
-    if (usernameMatch && passwordMatch) {
-        // Generate access token
+    if (accessIdMatch) {
+        // Generate access token (using 'admin' as generic username)
         const accessToken = jwt.sign(
-            { username: config.ADMIN_USER },
+            { username: 'admin' },
             config.JWT_SECRET,
             { expiresIn: config.JWT_EXPIRES_IN }
         );
 
         // Generate refresh token
         const refreshToken = jwt.sign(
-            { username: config.ADMIN_USER, type: 'refresh' },
+            { username: 'admin', type: 'refresh' },
             config.JWT_SECRET,
             { expiresIn: config.JWT_REFRESH_EXPIRES_IN }
         );
@@ -69,7 +63,7 @@ router.post('/login', validateLogin, handleValidationErrors, asyncHandler(async 
         const expiryTime = Date.now() + (7 * 24 * 60 * 60 * 1000);
         refreshTokens.set(refreshToken, expiryTime);
 
-        logger.info('Login successful', { username });
+        logger.info('Login successful', { user: 'admin' });
 
         res.json({
             success: true,
@@ -77,11 +71,11 @@ router.post('/login', validateLogin, handleValidationErrors, asyncHandler(async 
             refreshToken: refreshToken
         });
     } else {
-        logger.warn('Login failed - invalid credentials', { username });
+        logger.warn('Login failed - invalid access ID');
         res.status(401).json({
             success: false,
             error: 'Invalid credentials',
-            message: 'Username or password is incorrect'
+            message: 'Access ID is incorrect'
         });
     }
 }));

@@ -29,14 +29,9 @@
 
         <form id="loginForm" class="space-y-6">
             <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Username</label>
-                <input type="text" id="username" required
+                <label class="block text-sm font-medium text-gray-300 mb-2">Access ID</label>
+                <input type="password" id="accessId" required placeholder="Enter your Access ID"
                     class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00C6FF] transition-colors">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                <input type="password" id="password" required
-                    class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#0096C7] transition-colors">
             </div>
 
             <div id="errorMsg" class="text-red-400 text-sm text-center hidden">Invalid credentials</div>
@@ -70,15 +65,14 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             // ... (keep existing logic) ...
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const accessId = document.getElementById('accessId').value;
             const errorMsg = document.getElementById('errorMsg');
 
             try {
                 const response = await fetch('/api/login?v=' + Date.now(), { // Cache bust API call
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ accessId })
                 });
 
                 // Check if response is JSON
