@@ -1,12 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
 // Configuration
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
 
 // Initialize Express
 const app = express();
@@ -23,17 +21,9 @@ app.use((req, res, next) => {
 });
 
 // Database Connection
-if (!MONGODB_URI) {
-    console.error('❌ MONGODB_URI is not defined in .env');
-    process.exit(1);
-}
-
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('✅ Connected to MongoDB'))
-    .catch(err => {
-        console.error('❌ MongoDB connection error:', err);
-        process.exit(1);
-    });
+// MongoDB connection removed in favor of Supabase.
+// Supabase is initialized in services/db.js via config/supabase.js
+console.log('✅ Supabase client initialized (lazy loading)');
 
 // Import Routes
 const authRoute = require('./routes/auth');
